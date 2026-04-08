@@ -28,6 +28,7 @@ appsettings.Development.json
 *.secret.json
 cert/
 .env
+DotLearn.Assessment/Data/AssessmentDbContextFactory.cs
 
 # Logs and Temps
 *.log
