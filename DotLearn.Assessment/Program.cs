@@ -1,8 +1,10 @@
+using Amazon;
 using DotLearn.Assessment.Data;
 using DotLearn.Assessment.Middleware;
+using DotLearn.Assessment.Repositories;
+using DotLearn.Assessment.Services;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Amazon;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,15 +15,21 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-// AWS Secrets Manager
-builder.Configuration.AddSecretsManager(region: RegionEndpoint.APSoutheast2);
+// AWS Secrets Manager (Only in non-Development environments)
+if (!builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddSecretsManager(region: RegionEndpoint.APSoutheast2);
+}
 
 // Add services to the container.
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<AssessmentDbContext>(options =>
     options.UseSqlServer(connStr));
 
-builder.Services.AddHealthChecks().AddSqlServer(connStr);
+builder.Services.AddScoped<IAssessmentRepository, AssessmentRepository>();
+builder.Services.AddScoped<IAssessmentService, AssessmentService>();
+
+builder.Services.AddHealthChecks().AddSqlServer(connStr!);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
