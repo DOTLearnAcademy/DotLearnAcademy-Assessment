@@ -32,6 +32,8 @@ builder.Services.AddScoped<IAssessmentService, AssessmentService>();
 builder.Services.AddHealthChecks().AddSqlServer(connStr!);
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<DotLearn.Assessment.Middleware.CorrelationIdDelegatingHandler>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
