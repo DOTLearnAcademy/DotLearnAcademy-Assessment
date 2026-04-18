@@ -4,6 +4,7 @@ using DotLearn.Assessment.Middleware;
 using DotLearn.Assessment.Repositories;
 using DotLearn.Assessment.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
